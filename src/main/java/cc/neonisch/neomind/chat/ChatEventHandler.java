@@ -1,9 +1,11 @@
 package cc.neonisch.neomind.chat;
 
 import cc.neonisch.neomind.action.ActionExecutor;
+import cc.neonisch.neomind.command.SightApiClient;
 import cc.neonisch.neomind.config.NeoMindConfig;
 import cc.neonisch.neomind.llm.ActionPlan;
 import cc.neonisch.neomind.llm.LLMClient;
+import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +30,7 @@ public final class ChatEventHandler {
 
     private final ActionExecutor executor;
     private final MinecraftServer server;
+    private final boolean sightApiAvailable;
 
     /** Recent chat messages (player → string), capped at maxContextHistory. */
     private final Deque<String> recentChat = new ArrayDeque<>();
@@ -42,9 +45,10 @@ public final class ChatEventHandler {
         return t;
     });
 
-    public ChatEventHandler(ActionExecutor executor, MinecraftServer server) {
+    public ChatEventHandler(ActionExecutor executor, MinecraftServer server, boolean sightApiAvailable) {
         this.executor = executor;
         this.server = server;
+        this.sightApiAvailable = sightApiAvailable;
     }
 
     @SubscribeEvent
@@ -180,6 +184,28 @@ public final class ChatEventHandler {
         sb.append("\n  食物: ").append(player.getFoodData().getFoodLevel());
 
         sb.append("\n服务器: ").append(server.getPlayerCount()).append("/").append(server.getMaxPlayers()).append(" 人在线");
+
+        // ── Region context (if NeoSightAPI available) ──
+        if (sightApiAvailable) {
+            try {
+                var regions = SightApiClient.findRegionsAt(
+                        (int) player.getX(), (int) player.getZ(),
+                        player.level().dimension().location().toString()
+                );
+                if (!regions.isEmpty()) {
+                    sb.append("\n当前位置位于以下区域:\n");
+                    for (JsonObject r : regions) {
+                        sb.append("  - ").append(r.get("name").getAsString());
+                        String label = r.has("label") ? r.get("label").getAsString() : "";
+                        if (!label.isEmpty()) sb.append(": ").append(label);
+                        sb.append(" (属于 ").append(r.get("owner").getAsString()).append(")");
+                        sb.append("\n");
+                    }
+                }
+            } catch (Exception e) {
+                LOG.debug("SightAPI unreachable for region query", e);
+            }
+        }
 
         sb.append(ACTIONS_REFERENCE);
 

@@ -6,7 +6,7 @@ plugins {
 base {
     archivesName = "NeoMind"
     group = "cc.neonisch"
-    version = "0.0.15"
+    version = "0.0.2"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -46,7 +46,7 @@ tasks.named('processResources', ProcessResources).configure {
             mod_id                 : "neomind",
             mod_name               : "NeoMind",
             mod_license            : "MIT",
-            mod_version            : "0.0.15",
+            mod_version            : "0.0.2",
             mod_authors            : "NeoNisch",
             mod_description        : "NeoForge server-side AI butler — understands player chat and proactively cares"
     ]
