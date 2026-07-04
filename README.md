@@ -105,7 +105,7 @@ Game GUI: **Mods → NeoMind → Config**
 | `[actions]` | `allowedActions` | *(see source)* | Which actions LLM can use |
 | `[actions]` | `commandAllowlist` | `weather, time, say, give, tp, spawn` | Safe command prefixes |
 | `[proactive]` | `enabled` | `true` | Enable proactive care |
-| `[proactive]` | `greetingTemplate` | `欢迎 {player}...` | New player welcome message |
+| `[proactive]` | `greetingTemplate` | `Welcome {player}...` | New player welcome message |
 
 > **Note**: The action field reference (field names, allowed values) is injected at runtime from code — see `ChatEventHandler.java`. This keeps system prompts lean and field contracts close to the action dispatcher.
 
@@ -128,61 +128,6 @@ Game GUI: **Mods → NeoMind → Config**
 
 @Neo Ban that cheater
 → [Neo] Sorry, I can't do that action~ (destructive action blocked)
-```
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────┐
-│                  Player Chat                 │
-│                  "@Neo ..."                  │
-└──────────────────────┬──────────────────────┘
-                       │ ServerChatEvent
-                       ▼
-┌─────────────────────────────────────────────┐
-│            ChatEventHandler                 │
-│  • prefix check  • cooldown  • permissions  │
-│  • build context (coords/HP/food/chat)      │
-│  • inject ACTIONS_REFERENCE (field spec)    │
-└──────────────────────┬──────────────────────┘
-                       │ background thread
-                       ▼
-┌─────────────────────────────────────────────┐
-│               LLMClient                     │
-│  POST to OpenAI-compatible API              │
-│  Parse → ActionPlan (reasoning + actions)   │
-│  Markdown fence stripping + text fallback   │
-└──────────────────────┬──────────────────────┘
-                       │ back to main thread
-                       ▼
-┌─────────────────────────────────────────────┐
-│             ActionExecutor                  │
-│  noop / say / whisper / title              │
-│  teleport / give_item / set_time           │
-│  scan_entities / scan_blocks               │
-│  detect_structure / look_at                │
-│  run_command (allowlist-gated)              │
-└─────────────────────────────────────────────┘
-```
-
-### Source Layout
-
-```
-src/main/java/cc/neonisch/neomind/
-├── NeoMind.java              # @Mod entry: config, ServerStartedEvent
-├── config/
-│   └── NeoMindConfig.java    # ModConfigSpec — 4 sections (llm/chat/actions/proactive)
-├── chat/
-│   └── ChatEventHandler.java # ServerChatEvent → context → LLM → execute
-├── llm/
-│   ├── LLMClient.java        # HTTP client, markdown stripping, text fallback
-│   └── ActionPlan.java       # JSON parser → reasoning + typed actions
-├── action/
-│   └── ActionExecutor.java   # 16 action types, dimension resolver, scanner logic
-└── client/
-    └── NeoMindClient.java    # @Mod(CLIENT): config screen factory
 ```
 
 ---
@@ -225,8 +170,3 @@ AGPL-3.0 ensures that if you run NeoMind on a server and modify the code, those 
 - **Soen** — Project owner, molecular biologist by day, Minecraft tinkerer by night
 - **SightAPI** — NeoForge 21.1 API reference project (same MDG 2.0.141 stack)
 - **DeepSeek** — Default LLM provider (OpenAI-compatible API)
-
----
-
-> *"嘴上说你操作下饭，攻略我已经写好了。"*
-> — Neo
