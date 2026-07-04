@@ -19,7 +19,7 @@ NeoMind → LLM (DeepSeek / OpenAI-compatible)
        ↓
 Action plan: scan_entities{minecraft:slime}
        ↓
-[Neo → you] Found 5 minecraft:slime — 2 to the east, 3 to the south.
+[NM → you] Found 5 minecraft:slime — 2 to the east, 3 to the south.
 ```
 
 A single ~22KB jar. Zero runtime dependencies. Works on both dedicated servers and single-player (integrated server). Built-in config GUI (Mods → NeoMind → Config).
@@ -42,6 +42,17 @@ A single ~22KB jar. Zero runtime dependencies. Works on both dedicated servers a
 | `scan_blocks` | Locates specific blocks within 3 chunks + Y±16 range |
 | `detect_structure` | Discovers structures (villages, temples, etc.) in loaded chunks |
 | `look_at` | Raycast 3-layer detection: entities → structures → blocks |
+
+### 🗺️ Region System *(v0.2+ — requires [NeoSightAPI](https://github.com/Soenchin/NeoSightAPI))*
+
+| Command | Description |
+|---------|-------------|
+| `/nmland claim <name> [radius] [description]` | Register a region around you (default radius 15) |
+| `/nmland unclaim <name>` | Remove your region |
+| `/nmland list` | List all registered regions |
+| `/nmland list near` | Show regions at your current position |
+
+When NeoSightAPI is installed, NeoMind automatically injects region context into the LLM — so `@Neo Where am I?` can answer with region names and descriptions.
 
 ### ⚡ Action System
 | Action | Description |
@@ -117,19 +128,19 @@ Game GUI: **Mods → NeoMind → Config**
 
 ```
 @Neo Where am I?
-→ [Neo] You're at 120.5, 64.0, -302.2 in the Overworld, HP 18/20, hunger 17
+→ [NM] You're at 120.5, 64.0, -302.2 in the Overworld, HP 18/20, hunger 17
 
 @Neo Any sheep nearby?
-→ [Neo → you] Found 3 minecraft:sheep — 2 east, 1 north.
+→ [NM → you] Found 3 minecraft:sheep — 2 east, 1 north.
 
 @Neo Give me 64 bread
-→ [Neo] Here's 64 bread!
+→ [NM] Here's 64 bread!
 
 @Neo It's so cloudy, clear it up
 → /weather clear
 
 @Neo Ban that cheater
-→ [Neo] Sorry, I can't do that action~ (destructive action blocked)
+→ [NM] Sorry, I can't do that action~ (destructive action blocked)
 ```
 
 ---
@@ -140,7 +151,7 @@ Game GUI: **Mods → NeoMind → Config**
 |---------|--------|----------|
 | **v0.0.1** | ✅ Done | MVP — chat, 6 basic actions (say/whisper/teleport/give/set_time/run_command), config GUI, single-player + dedicated server |
 | **v0.0.15** | ✅ Done | `scan_entities` (3×3 chunk entity scan), `scan_blocks` (surface block scan), `detect_structure` (structure discovery via chunk data), `look_at` (3-layer raycast: entity → structure → block), `@Neo` chat trigger |
-| **v0.2** | Planned | NeoSightAPI integration (soft dep via `Class.forName`), TPS/memory/shard info |
+| **v0.2** | ✅ Done | NeoSightAPI integration — `/nmland` region commands, LLM region context injection, soft dep via `ModList.isLoaded()` |
 | **v0.3** | Planned | Proactive watcher (death streaks, low TPS alerts, new player greeting, phantom warning), `set_weather` implementation |
 | **v1.0** | Planned | `mark_waypoint` / `chunk_ticket` / `spawn_entity` / `schedule` full implementation |
 
