@@ -2,6 +2,8 @@
 
 > An AI butler for your Minecraft server — talk to it, and it talks back (and acts).
 
+📖 [中文文档](README-CN.md) | English
+
 NeoMind is a lightweight NeoForge mod that brings an LLM-powered assistant directly into your Minecraft world. Simply type `@Neo` in chat, ask for what you need, and watch the AI respond with actions, conversation, and world awareness.
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1~1.21.4-4CAF50?style=flat-square) ![NeoForge](https://img.shields.io/badge/NeoForge-21.1+-E67E22?style=flat-square) ![Java](https://img.shields.io/badge/Java-21-ED8B00?style=flat-square) ![License](https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat-square) ![Size](https://img.shields.io/badge/Jar~22KB-9cf?style=flat-square)
