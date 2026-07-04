@@ -19,7 +19,7 @@ NeoMind → LLM (DeepSeek / OpenAI 兼容)
        ↓
 动作计划: scan_entities{minecraft:slime}
        ↓
-[Neo → 你] 发现 5 个 minecraft:slime — 东边2只，南边3只。
+[NM → 你] 发现 5 个 minecraft:slime — 东边2只，南边3只。
 ```
 
 一个 ~22KB 的 jar。零运行时依赖。专用服务器和单机（集成服务器）都能跑。内置配置 GUI（Mods → NeoMind → Config）。
@@ -42,6 +42,17 @@ NeoMind → LLM (DeepSeek / OpenAI 兼容)
 | `scan_blocks` | 在 3 区块 + Y±16 范围内定位特定方块 |
 | `detect_structure` | 在已加载区块中探测结构（村庄、神庙等） |
 | `look_at` | 三层射线检测：实体 → 结构 → 方块 |
+
+### 🗺️ 区域系统 *(v0.2+ — 需要安装 [NeoSightAPI](https://github.com/Soenchin/NeoSightAPI))*
+
+| 命令 | 说明 |
+|---------|-------------|
+| `/nmland claim <名称> [半径] [描述]` | 以你为中心注册区域（默认半径 15） |
+| `/nmland unclaim <名称>` | 删除你的区域 |
+| `/nmland list` | 列出所有已注册区域 |
+| `/nmland list near` | 显示你当前所在位置的区域 |
+
+安装了 NeoSightAPI 后，NeoMind 会自动将区域信息注入 LLM 上下文 — 所以 `@Neo 我在哪？` 可以回答区域名称和描述。
 
 ### ⚡ 动作系统
 | 动作 | 说明 |
@@ -117,19 +128,19 @@ NeoMind → LLM (DeepSeek / OpenAI 兼容)
 
 ```
 @Neo 我在哪？
-→ [Neo] 你在主世界 120.5, 64.0, -302.2，生命值 18/20，饥饿值 17
+→ [NM] 你在主世界 120.5, 64.0, -302.2，生命值 18/20，饥饿值 17
 
 @Neo 附近有羊吗？
-→ [Neo → 你] 发现 3 个 minecraft:sheep — 东边2只，北边1只。
+→ [NM → 你] 发现 3 个 minecraft:sheep — 东边2只，北边1只。
 
 @Neo 给我 64 个面包
-→ [Neo] 给你 64 个面包！
+→ [NM] 给你 64 个面包！
 
 @Neo 天气好阴，放晴吧
 → /weather clear
 
 @Neo 封禁那个作弊玩家
-→ [Neo] 抱歉，这个操作我做不了~（破坏性操作已被禁止）
+→ [NM] 抱歉，这个操作我做不了~（破坏性操作已被禁止）
 ```
 
 ---
@@ -138,9 +149,10 @@ NeoMind → LLM (DeepSeek / OpenAI 兼容)
 
 | 版本 | 计划内容 |
 |---------|---------|
-| **v0.1** | ✅ MVP — 聊天, 6 种基础动作, 配置, 单机 + 专用服务器 |
-| **v0.2** | NeoSightAPI 集成（运行时软依赖 via Class.forName） |
-| **v0.3** | 主动监控（连死提醒, 低 TPS, 新玩家欢迎, 幻翼警告） |
+| **v0.1** | ✅ 完成 | MVP — 聊天, 6 种基础动作, 配置, 单机 + 专用服务器 |
+| **v0.0.15** | ✅ 完成 | `scan_entities`、`scan_blocks`、`detect_structure`、`look_at`，`@Neo` 聊天触发 |
+| **v0.2** | ✅ 完成 | NeoSightAPI 集成 — `/nmland` 区域命令、LLM 区域上下文注入、运行时软依赖 |
+| **v0.3** | 计划中 | 主动监控（连死提醒, 低 TPS, 新玩家欢迎, 幻翼警告） |
 | **v1.0** | `mark_waypoint` / `chunk_ticket` / `spawn_entity` / `schedule` 完整实现 |
 
 ---
