@@ -144,15 +144,19 @@ public final class ChatEventHandler {
     private static final String ACTIONS_REFERENCE = """
         
         可用动作参考（严格遵守字段名，缺失字段导致动作失败）:
-        - say:        {"type":"say", "message":"广播内容"}
-        - whisper:    {"type":"whisper", "player":"玩家名", "message":"私聊内容"}
-        - title:      {"type":"title", "player":"玩家名", "title":"大标题", "subtitle":"副标题"}
-        - give_item:  {"type":"give_item", "player":"玩家名", "item":"物品ID", "count":数量}
-        - teleport:   {"type":"teleport", "player":"玩家名", "x":0.0, "y":64.0, "z":0.0, "dimension":"minecraft:overworld"}
-        - set_time:   {"type":"set_time", "time":"day/noon/night/midnight"}
-        - set_weather:{"type":"set_weather", "weather":"clear/rain/thunder"}
-        - run_command:{"type":"run_command", "command":"控制台指令"}
-        - noop:       {"type":"noop"}  (不知道怎么做时用这个)
+        - say:             {"type":"say", "message":"广播内容"}
+        - whisper:         {"type":"whisper", "player":"玩家名", "message":"私聊内容"}
+        - title:           {"type":"title", "player":"玩家名", "title":"大标题", "subtitle":"副标题"}
+        - give_item:       {"type":"give_item", "player":"玩家名", "item":"物品ID", "count":数量}
+        - teleport:        {"type":"teleport", "player":"玩家名", "x":0.0, "y":64.0, "z":0.0, "dimension":"minecraft:overworld"}
+        - set_time:        {"type":"set_time", "time":"day/noon/night/midnight"}
+        - set_weather:     {"type":"set_weather", "weather":"clear/rain/thunder"}
+        - run_command:     {"type":"run_command", "command":"控制台指令"}
+        - scan_entities:   {"type":"scan_entities", "entity":"minecraft:pig"}  (扫描3x3区块内实体，返回数量和方位)
+        - scan_blocks:     {"type":"scan_blocks", "block":"minecraft:sand"}  (扫描3x3区块地表方块，返回数量和最近方位)
+        - detect_structure:{"type":"detect_structure"}  (检测附近非玩家结构如村庄/地狱门遗迹/神殿等)
+        - look_at:         {"type":"look_at"}  (看你面前是什么方块)
+        - noop:            {"type":"noop"}  (不知道怎么做时用这个)
         命令白名单: weather, time, say, give, tp, spawn
         """;
 

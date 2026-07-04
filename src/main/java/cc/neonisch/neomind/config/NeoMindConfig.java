@@ -74,8 +74,8 @@ public final class NeoMindConfig {
 
         // ── Chat 聊天 ─────────────────────────────────────
         b.push("chat");
-        b.comment(" 触发 NeoMind 的聊天前缀。也支持 @Neo 作为备选。");
-        CHAT_TRIGGER_PREFIX = b.define("triggerPrefix", "Neo，");
+        b.comment(" 触发 NeoMind 的聊天前缀");
+        CHAT_TRIGGER_PREFIX = b.define("triggerPrefix", "@Neo");
         b.comment(" 开启后只有 OP 才能使用聊天指令");
         CHAT_REQUIRE_OP = b.define("requireOp", false);
         b.comment(" 玩家两次触发之间的冷却时间（毫秒）");
@@ -86,11 +86,12 @@ public final class NeoMindConfig {
 
         // ── Actions 动作 ───────────────────────────────────
         b.push("actions");
-        b.comment(" LLM 可以请求执行的动作列表");
+        b.comment(" LLM 可以请求执行的动作列表（0.0.15 新增 scan_entities/scan_blocks/detect_structure）");
         ALLOWED_ACTIONS = b.defineList("allowedActions",
-            List.of("noop", "say", "whisper", "title", "mark_waypoint",
-                    "chunk_ticket", "give_item", "set_time", "set_weather",
-                    "schedule", "run_command"),
+            List.of("noop", "say", "whisper", "title", "teleport",
+                    "mark_waypoint", "chunk_ticket", "give_item",
+                    "set_time", "set_weather", "schedule", "run_command",
+                    "scan_entities", "scan_blocks", "detect_structure", "look_at"),
             s -> s instanceof String && !((String) s).isEmpty()
         );
         b.comment(" run_command 允许执行的控制台命令");
