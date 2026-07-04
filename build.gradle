@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+base {
+    archivesName = "NeoMind"
+    group = "cc.neonisch"
+    version = "0.0.1"
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = "21.1.202"
+    validateAccessTransformers = true
+
+    runs {
+        server { server() }
+    }
+
+    mods {
+        "neomind" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    // JSON parsing — bundled by Minecraft already, compileOnly to avoid dupes
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version      : "1.21.1",
+            minecraft_version_range: "[1.21,1.22)",
+            neo_version            : "21.1.202",
+            neo_version_range      : "[21.1,22)",
+            loader_version_range   : "[4,)",
+            mod_id                 : "neomind",
+            mod_name               : "NeoMind",
+            mod_license            : "MIT",
+            mod_version            : "0.0.1",
+            mod_authors            : "NeoNisch",
+            mod_description        : "NeoForge server-side AI butler — understands player chat and proactively cares"
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
