@@ -65,7 +65,7 @@ public final class ChatEventHandler {
 
         // ── Permission check ──
         if (NeoMindConfig.CHAT_REQUIRE_OP.get() && !player.hasPermissions(2)) {
-            player.sendSystemMessage(Component.literal("[Neo] 只有 OP 才能使用聊天指令哦。"));
+            player.sendSystemMessage(Component.literal("[NM] 只有 OP 才能使用聊天指令哦。"));
             return;
         }
 
@@ -73,7 +73,7 @@ public final class ChatEventHandler {
         long now = System.currentTimeMillis();
         Long last = cooldowns.get(player.getUUID());
         if (last != null && (now - last) < NeoMindConfig.CHAT_COOLDOWN_MS.get()) {
-            player.sendSystemMessage(Component.literal("[Neo] 冷却中，稍等一下~"));
+            player.sendSystemMessage(Component.literal("[NM] 冷却中，稍等一下~"));
             return;
         }
         cooldowns.put(player.getUUID(), now);
@@ -101,7 +101,7 @@ public final class ChatEventHandler {
                 server.execute(() -> {
                     ServerPlayer p = server.getPlayerList().getPlayerByName(frozenPlayerName);
                     if (p != null) {
-                        p.sendSystemMessage(Component.literal("[Neo] 我现在有点卡，稍后再试~"));
+                        p.sendSystemMessage(Component.literal("[NM] 我现在有点卡，稍后再试~"));
                     }
                 });
                 return;
@@ -118,9 +118,9 @@ public final class ChatEventHandler {
                     ServerPlayer p = server.getPlayerList().getPlayerByName(frozenPlayerName);
                     if (p == null) return;
                     if (!plan.reasoning().isEmpty()) {
-                        p.sendSystemMessage(Component.literal("[Neo] " + clipReasoning(plan.reasoning())));
+                        p.sendSystemMessage(Component.literal("[NM] " + clipReasoning(plan.reasoning())));
                     } else {
-                        p.sendSystemMessage(Component.literal("[Neo] 抱歉，我不太确定该怎么回答这个，换个问法试试？"));
+                        p.sendSystemMessage(Component.literal("[NM] 抱歉，我不太确定该怎么回答这个，换个问法试试？"));
                     }
                 });
             } else {
@@ -131,9 +131,9 @@ public final class ChatEventHandler {
                     ServerPlayer p = server.getPlayerList().getPlayerByName(frozenPlayerName);
                     if (p == null) return;
                     if (done == 0) {
-                        p.sendSystemMessage(Component.literal("[Neo] 抱歉，我不太确定该怎么回答这个，换个问法试试？"));
+                        p.sendSystemMessage(Component.literal("[NM] 抱歉，我不太确定该怎么回答这个，换个问法试试？"));
                     } else if (done < total) {
-                        p.sendSystemMessage(Component.literal("[Neo] 部分操作未能执行（" + done + "/" + total + "），可能是 LLM 返回的 JSON 不完整。"));
+                        p.sendSystemMessage(Component.literal("[NM] 部分操作未能执行（" + done + "/" + total + "），可能是 LLM 返回的 JSON 不完整。"));
                     }
                 });
             }

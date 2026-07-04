@@ -96,7 +96,7 @@ public final class ActionExecutor {
     private boolean say(String message) {
         if (message == null || message.isEmpty()) return false;
         server.getPlayerList().broadcastSystemMessage(
-                Component.literal("[Neo] " + clip(message)), false);
+                Component.literal("[NM] " + clip(message)), false);
         return true;
     }
 
